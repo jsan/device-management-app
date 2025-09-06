@@ -2,6 +2,7 @@ package com.sample.devicemanagement.service.impl;
 
 import com.sample.devicemanagement.dto.DeviceDto;
 import com.sample.devicemanagement.repository.DeviceRepository;
+import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import com.sample.devicemanagement.service.DeviceService;
 import com.sample.devicemanagement.service.mapper.DeviceEntityMapper;
 import jakarta.persistence.PersistenceException;

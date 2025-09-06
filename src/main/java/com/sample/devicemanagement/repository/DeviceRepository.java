@@ -1,5 +1,6 @@
 package com.sample.devicemanagement.repository;
 
+import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

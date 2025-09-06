@@ -1,6 +1,7 @@
 package com.sample.devicemanagement.service.mapper;
 
 import com.sample.devicemanagement.dto.DeviceDto;
+import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
