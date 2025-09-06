@@ -4,6 +4,7 @@ import com.sample.devicemanagement.dto.DeviceDto;
 import com.sample.devicemanagement.repository.DeviceRepository;
 import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import com.sample.devicemanagement.service.DeviceService;
+import com.sample.devicemanagement.service.exception.DeviceAlreadyExistsException;
 import com.sample.devicemanagement.service.mapper.DeviceEntityMapper;
 import jakarta.persistence.PersistenceException;
 import lombok.AllArgsConstructor;
@@ -29,10 +30,10 @@ public class DeviceServiceImpl implements DeviceService {
             DeviceEntity savedDevice = deviceRepository.save(deviceEntity);
             return deviceEntityMapper.toDeviceDto(savedDevice);
         } catch (DataIntegrityViolationException e) {
-            log.info("Device for name '{}' and brand '{}' already exists", deviceDto.getName(), deviceDto.getBrand());
-            throw e;
+            log.info("Device for ID '{}' name '{}' and brand '{}' already exists", deviceDto.getDeviceId(), deviceDto.getName(), deviceDto.getBrand());
+            throw new DeviceAlreadyExistsException(deviceDto.getDeviceId(), deviceDto.getName(), deviceDto.getBrand());
         } catch (Exception e) {
-            log.error("Unable to save data to persistence:", e);
+            log.error("Unable to save Device data to persistence:", e);
             throw new PersistenceException(e);
         }
     }

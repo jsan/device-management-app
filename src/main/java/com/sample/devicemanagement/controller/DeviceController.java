@@ -21,10 +21,10 @@ public class DeviceController {
     private final DeviceService deviceService;
 
     @PostMapping("create")
-    public ResponseEntity<DeviceDto> saveUser(@RequestBody @Valid DeviceDto device)
+    public ResponseEntity<DeviceDto> saveUser(@RequestBody @Valid DeviceDto deviceDto)
     {
-        log.info("Saving device: {}", device);
-        return new ResponseEntity<>(deviceService.createDevice(device), HttpStatus.CREATED);
+        log.info("Saving device: {}", deviceDto);
+        return new ResponseEntity<>(deviceService.createDevice(deviceDto), HttpStatus.CREATED);
     }
 
 }
