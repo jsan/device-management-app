@@ -10,7 +10,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class DeviceDto {
 
-    Integer deviceId;
+    String deviceId;
     String name;
     String brand;
     State state;

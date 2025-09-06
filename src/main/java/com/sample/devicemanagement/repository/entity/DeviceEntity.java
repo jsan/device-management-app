@@ -10,8 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,10 +32,9 @@ public class DeviceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Min(0)
-    @Max(999999)
+    @Size(min = 1, max = 6)
     @Column(nullable = false, unique = true)
-    private Integer deviceId;
+    private String deviceId;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)

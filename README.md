@@ -1,4 +1,5 @@
 # device-management-app
+
 ### Description 
 REST API application for managing device resources
 
@@ -56,3 +57,8 @@ DMA-07 Implement Documentation
 - SLF4J
 - Spring Security
 - Spring Boot Actuator
+
+### Notes
+
+- This project includes a comprehensive suite of unit tests for the core business logic, ensuring that each component functions as expected in isolation.
+- As a planned future enhancement, integration tests would be a logical next step to verify the end-to-end flow.
