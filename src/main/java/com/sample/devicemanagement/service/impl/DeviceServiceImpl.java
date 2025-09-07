@@ -46,7 +46,7 @@ public class DeviceServiceImpl implements DeviceService {
     public DeviceDto getDeviceById(String deviceId) {
         return deviceRepository.findDeviceByDeviceId(deviceId)
                 .map(deviceEntityMapper::toDeviceDto)
-                .orElseThrow(() -> new DeviceNotFoundException("Device not found with id: " + deviceId));
+                .orElseThrow(() -> new DeviceNotFoundException(deviceId));
     }
 
     @Override
