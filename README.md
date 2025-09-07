@@ -37,11 +37,13 @@ DMA-03 Create Entity, Repository, Service and Controller Layers
 
 DMA-04 Implement Create Function and Exception Handling
 
-DMA-05 Implement Get, Update, Delete Functions
+DMA-05 Implement Get methods
 
 DMA-06 Implement Search Filters
 
-DMA-07 Implement Documentation
+DMA-07 Update, Delete Functions
+
+DMA-08 Implement Documentation
 
 ### Tech Stack
 - Java 21
