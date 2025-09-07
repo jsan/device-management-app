@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,10 @@ import java.time.Instant;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "devices")
+@Table(name = "devices", indexes = {
+        @Index(name = "idx_device_brand", columnList = "deviceBrand"),
+        @Index(name = "idx_device_state", columnList = "deviceState")
+})
 public class DeviceEntity {
 
     @Id

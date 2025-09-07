@@ -1,5 +1,6 @@
 package com.sample.devicemanagement.service;
 
+import com.sample.devicemanagement.domain.State;
 import com.sample.devicemanagement.dto.DeviceDto;
 import com.sample.devicemanagement.dto.DeviceTableViewDto;
 import com.sample.devicemanagement.repository.DeviceRepository;
@@ -32,6 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(MockitoExtension.class)
 class DeviceServiceTest {
 
@@ -130,7 +132,6 @@ class DeviceServiceTest {
 
     @Test
     void getAllDevices_shouldReturnMappedDto_whenRepositoryReturnsPage() {
-        // given
         Pageable pageable = mock(Pageable.class);
         Page<DeviceEntity> page = new PageImpl<>(List.of(deviceEntity));
         DeviceTableViewDto tableViewDto = DeviceTableViewDto.builder().build();
@@ -138,10 +139,8 @@ class DeviceServiceTest {
         when(deviceRepository.findAll(pageable)).thenReturn(page);
         when(deviceEntityMapper.toDeviceTableView(page)).thenReturn(tableViewDto);
 
-        // when
         DeviceTableViewDto result = deviceService.getAllDevices(pageable);
 
-        // then
         assertNotNull(result);
         assertSame(tableViewDto, result);
         verify(deviceRepository).findAll(pageable);
@@ -150,13 +149,47 @@ class DeviceServiceTest {
 
     @Test
     void getAllDevices_shouldThrowPersistenceException_whenRepositoryFails() {
-        // given
         Pageable pageable = mock(Pageable.class);
         when(deviceRepository.findAll(pageable)).thenThrow(new RuntimeException("DB down"));
 
-        // when + then
         PersistenceException ex = assertThrows(PersistenceException.class,
                 () -> deviceService.getAllDevices(pageable));
+
+        assertTrue(ex.getCause() instanceof RuntimeException);
+        assertEquals("DB down", ex.getCause().getMessage());
+    }
+
+    @Test
+    void getDevicesByBrandAndState_shouldReturnMappedDto_whenRepositoryReturnsPage() {
+        Pageable pageable = mock(Pageable.class);
+        String brand = "BrandX";
+        State state = State.AVAILABLE;
+
+        Page<DeviceEntity> page = new PageImpl<>(List.of(deviceEntity));
+        DeviceTableViewDto tableViewDto = DeviceTableViewDto.builder().build();
+
+        when(deviceRepository.findByBrandAndState(brand, state, pageable)).thenReturn(page);
+        when(deviceEntityMapper.toDeviceTableView(page)).thenReturn(tableViewDto);
+
+        DeviceTableViewDto result = deviceService.getDevicesByBrandAndState(pageable, brand, state);
+
+        assertNotNull(result);
+        assertSame(tableViewDto, result);
+        verify(deviceRepository).findByBrandAndState(brand, state, pageable);
+        verify(deviceEntityMapper).toDeviceTableView(page);
+    }
+
+    @Test
+    void getDevicesByBrandAndState_shouldThrowPersistenceException_whenRepositoryFails() {
+        Pageable pageable = mock(Pageable.class);
+        String brand = "BrandX";
+        State state = State.AVAILABLE;
+
+        when(deviceRepository.findByBrandAndState(brand, state, pageable))
+                .thenThrow(new RuntimeException("DB down"));
+
+        PersistenceException ex = assertThrows(PersistenceException.class,
+                () -> deviceService.getDevicesByBrandAndState(pageable, brand, state));
 
         assertTrue(ex.getCause() instanceof RuntimeException);
         assertEquals("DB down", ex.getCause().getMessage());

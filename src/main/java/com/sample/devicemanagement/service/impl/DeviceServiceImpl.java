@@ -1,5 +1,6 @@
 package com.sample.devicemanagement.service.impl;
 
+import com.sample.devicemanagement.domain.State;
 import com.sample.devicemanagement.dto.DeviceDto;
 import com.sample.devicemanagement.dto.DeviceTableViewDto;
 import com.sample.devicemanagement.repository.DeviceRepository;
@@ -15,8 +16,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -61,18 +60,14 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public List<DeviceDto> getAllDevicesByBrand(String brand) {
-        return List.of();
-    }
-
-    @Override
-    public List<DeviceDto> getAllDevicesByState(String state) {
-        return List.of();
-    }
-
-    @Override
-    public DeviceDto updateDevice(DeviceDto deviceDto) {
-        return null;
+    public DeviceTableViewDto getDevicesByBrandAndState(Pageable paging, String deviceBrand, State deviceState) {
+        try {
+            Page<DeviceEntity> pageResult = deviceRepository.findByBrandAndState(deviceBrand, deviceState, paging);
+            return deviceEntityMapper.toDeviceTableView(pageResult);
+        } catch (Exception e) {
+            log.error("Unable to read data from persistence:", e);
+            throw new PersistenceException(e);
+        }
     }
 
     @Override

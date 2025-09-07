@@ -1,5 +1,7 @@
 package com.sample.devicemanagement.controller;
 
+import com.sample.devicemanagement.controller.validation.ValidDeviceState;
+import com.sample.devicemanagement.domain.State;
 import com.sample.devicemanagement.dto.DeviceDto;
 import com.sample.devicemanagement.dto.DeviceTableViewDto;
 import com.sample.devicemanagement.service.DeviceService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.sample.devicemanagement.util.DeviceConstants.DEVICE_ID_REGEX;
@@ -39,18 +42,28 @@ public class DeviceController {
         return new ResponseEntity<>(deviceService.createDevice(deviceDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<DeviceTableViewDto> listAllDevices(@PageableDefault(size = 5)
-            @SortDefault(sort = "deviceId", direction = DESC) Pageable paging) {
-        log.info("Listing all devices");
-        return ResponseEntity.ok(deviceService.getAllDevices(paging));
-    }
-
-    @GetMapping("/{deviceId}")
+    @GetMapping("/id/{deviceId}")
     public ResponseEntity<DeviceDto> getDeviceById(
             @PathVariable("deviceId") @Pattern(regexp = DEVICE_ID_REGEX, message = DEVICE_ID_REGEX_FAIL_MESSAGE) String deviceId) {
         log.info("Getting device: {}", deviceId);
         return ResponseEntity.ok(deviceService.getDeviceById(deviceId));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<DeviceTableViewDto> listAllDevices(@PageableDefault(size = 5)
+             @SortDefault(sort = "deviceId", direction = DESC) Pageable paging) {
+        log.info("Listing all devices");
+        return ResponseEntity.ok(deviceService.getAllDevices(paging));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<DeviceTableViewDto> listDevicesByBrandAndState(@PageableDefault(size = 5)
+             @SortDefault(sort = "deviceId", direction = DESC) Pageable paging,
+             @RequestParam(value = "brand", required = false) String deviceBrand,
+             @RequestParam(value = "state", required = false) @ValidDeviceState(enumClass = State.class) String deviceState) {
+        log.info("Listing devices by brand and state");
+
+        return ResponseEntity.ok(deviceService.getDevicesByBrandAndState(paging, deviceBrand, State.fromText(deviceState)));
     }
 
 }
