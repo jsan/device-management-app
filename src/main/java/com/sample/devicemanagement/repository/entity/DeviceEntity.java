@@ -32,15 +32,20 @@ public class DeviceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Size(min = 1, max = 6)
     @Column(nullable = false, unique = true)
     private String deviceId;
+
     @Column(nullable = false)
-    private String name;
+    private String deviceName;
+
     @Column(nullable = false)
-    private String brand;
+    private String deviceBrand;
+
     @Enumerated(EnumType.STRING)
-    private State state;
+    private State deviceState;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

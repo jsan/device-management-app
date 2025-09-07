@@ -9,7 +9,7 @@ REST API application for managing device resources
 ```
 
 ```bash
-docker build -t springboot-restfull-webservices:latest . 
+docker build -t device-management-app:latest . 
 ```
 
 ```bash

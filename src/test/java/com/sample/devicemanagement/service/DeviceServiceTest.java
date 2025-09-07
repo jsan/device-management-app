@@ -38,18 +38,18 @@ class DeviceServiceTest {
     void setUp() {
         deviceDto = DeviceDto.builder()
                 .deviceId("123")
-                .name("Smartphone")
-                .brand("Samsung")
+                .deviceName("Smartphone")
+                .deviceBrand("Samsung")
                 .build();
         deviceEntity = DeviceEntity.builder()
                 .deviceId("123")
-                .name("Smartphone")
-                .brand("Samsung")
+                .deviceName("Smartphone")
+                .deviceBrand("Samsung")
                 .build();
         savedDeviceEntity = DeviceEntity.builder()
                 .deviceId("123")
-                .name("Smartphone")
-                .brand("Samsung")
+                .deviceName("Smartphone")
+                .deviceBrand("Samsung")
                 .build();
         when(deviceEntityMapper.toDeviceEntity(deviceDto)).thenReturn(deviceEntity);
     }
@@ -63,27 +63,22 @@ class DeviceServiceTest {
 
         assertNotNull(createdDevice);
         assertEquals("123", createdDevice.getDeviceId());
-        assertEquals("Smartphone", createdDevice.getName());
-        assertEquals("Samsung", createdDevice.getBrand());
+        assertEquals("Smartphone", createdDevice.getDeviceName());
+        assertEquals("Samsung", createdDevice.getDeviceBrand());
     }
 
     @Test
     void createDevice_withDuplicateDevice_throwsDeviceAlreadyExistsException() {
-        // Arrange
-        // Mock the repository to throw a DataIntegrityViolationException when saving.
         when(deviceRepository.save(any(DeviceEntity.class)))
                 .thenThrow(DataIntegrityViolationException.class);
 
-        // Act & Assert
-        // Use assertThrows to verify that the expected exception is thrown.
         DeviceAlreadyExistsException thrown = assertThrows(
                 DeviceAlreadyExistsException.class,
                 () -> deviceService.createDevice(deviceDto)
         );
 
-        // Verify the message of the thrown exception.
-        String expectedMessage = String.format("Device with ID %s, name %s, and brand %s already exists.",
-                deviceDto.getDeviceId(), deviceDto.getName(), deviceDto.getBrand());
+        String expectedMessage = String.format("Device with ID '%s', name '%s', and brand '%s' already exists.",
+                deviceDto.getDeviceId(), deviceDto.getDeviceName(), deviceDto.getDeviceBrand());
         assertEquals(expectedMessage, thrown.getMessage());
     }
 

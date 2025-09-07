@@ -30,8 +30,8 @@ public class DeviceServiceImpl implements DeviceService {
             DeviceEntity savedDevice = deviceRepository.save(deviceEntity);
             return deviceEntityMapper.toDeviceDto(savedDevice);
         } catch (DataIntegrityViolationException e) {
-            log.info("Device with ID '{}' name '{}' and brand '{}' already exists", deviceDto.getDeviceId(), deviceDto.getName(), deviceDto.getBrand());
-            throw new DeviceAlreadyExistsException(deviceDto.getDeviceId(), deviceDto.getName(), deviceDto.getBrand());
+            log.info("Device with ID '{}' name '{}' and brand '{}' already exists", deviceDto.getDeviceId(), deviceDto.getDeviceName(), deviceDto.getDeviceBrand());
+            throw new DeviceAlreadyExistsException(deviceDto.getDeviceId(), deviceDto.getDeviceName(), deviceDto.getDeviceBrand());
         } catch (Exception e) {
             log.error("Unable to save Device data to persistence:", e);
             throw new PersistenceException(e);
