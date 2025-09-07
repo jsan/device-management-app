@@ -9,9 +9,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,22 +27,29 @@ import java.time.Instant;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "devices")
+@Table(name = "devices", indexes = {
+        @Index(name = "idx_device_brand", columnList = "deviceBrand"),
+        @Index(name = "idx_device_state", columnList = "deviceState")
+})
 public class DeviceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Min(0)
-    @Max(999999)
+
+    @Size(min = 1, max = 6)
     @Column(nullable = false, unique = true)
-    private Integer deviceId;
+    private String deviceId;
+
     @Column(nullable = false)
-    private String name;
+    private String deviceName;
+
     @Column(nullable = false)
-    private String brand;
+    private String deviceBrand;
+
     @Enumerated(EnumType.STRING)
-    private State state;
+    private State deviceState;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

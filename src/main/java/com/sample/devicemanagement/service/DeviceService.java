@@ -1,17 +1,16 @@
 package com.sample.devicemanagement.service;
 
+import com.sample.devicemanagement.domain.State;
 import com.sample.devicemanagement.dto.DeviceDto;
-
-import java.util.List;
+import com.sample.devicemanagement.dto.DeviceTableViewDto;
+import org.springframework.data.domain.Pageable;
 
 public interface DeviceService {
 
     DeviceDto createDevice(DeviceDto device);
-    DeviceDto getDeviceById(Long deviceId);
-    List<DeviceDto> getAllDevices();
-    List<DeviceDto> getAllDevicesByBrand(String brand);
-    List<DeviceDto> getAllDevicesByState(String state);
-    DeviceDto updateDevice(DeviceDto deviceDto);
+    DeviceDto getDeviceById(String deviceId);
+    DeviceTableViewDto getAllDevices(Pageable paging);
+    DeviceTableViewDto getDevicesByBrandAndState(Pageable paging, String brand, State state);
     void deleteDevice(Long id);
 
 }
