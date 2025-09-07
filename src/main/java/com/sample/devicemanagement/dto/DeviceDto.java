@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.Instant;
+
 @Value
 @Builder
 @Jacksonized
@@ -28,5 +30,7 @@ public class DeviceDto {
     @ValidDeviceState(enumClass = State.class)
     @NotNull(message = "State is mandatory, can't be empty")
     String deviceState;
+
+    Instant createdAt;
 
 }

@@ -1,6 +1,7 @@
 package com.sample.devicemanagement.service.impl;
 
 import com.sample.devicemanagement.dto.DeviceDto;
+import com.sample.devicemanagement.dto.DeviceTableViewDto;
 import com.sample.devicemanagement.repository.DeviceRepository;
 import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import com.sample.devicemanagement.service.DeviceService;
@@ -10,6 +11,8 @@ import jakarta.persistence.PersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,8 +47,14 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public List<DeviceDto> getAllDevices() {
-        return List.of();
+    public DeviceTableViewDto getAllDevices(Pageable paging) {
+        try {
+            Page<DeviceEntity> pageResult = deviceRepository.findAll(paging);
+            return deviceEntityMapper.toDeviceTableView(pageResult);
+        } catch (Exception e) {
+            log.error("Unable to read data from persistence:", e);
+            throw new PersistenceException(e);
+        }
     }
 
     @Override

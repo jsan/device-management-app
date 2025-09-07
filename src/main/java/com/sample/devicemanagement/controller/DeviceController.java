@@ -1,6 +1,7 @@
 package com.sample.devicemanagement.controller;
 
 import com.sample.devicemanagement.dto.DeviceDto;
+import com.sample.devicemanagement.dto.DeviceTableViewDto;
 import com.sample.devicemanagement.service.DeviceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
@@ -35,12 +34,10 @@ public class DeviceController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<DeviceDto>> listAllDevices(
-            @PageableDefault(size = 5) @SortDefault(sort = "deviceId", direction = DESC) Pageable paging) {
+    public ResponseEntity<DeviceTableViewDto> listAllDevices(@PageableDefault(size = 5)
+            @SortDefault(sort = "deviceId", direction = DESC) Pageable paging) {
         log.info("Listing all devices");
-        List<DeviceDto> deviceList = deviceService.getAllDevices();
-
-        return new ResponseEntity<>(deviceList, HttpStatus.OK);
+        return ResponseEntity.ok(deviceService.getAllDevices(paging));
     }
 
 }
