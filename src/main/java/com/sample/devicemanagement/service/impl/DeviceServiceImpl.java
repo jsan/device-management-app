@@ -6,6 +6,7 @@ import com.sample.devicemanagement.repository.DeviceRepository;
 import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import com.sample.devicemanagement.service.DeviceService;
 import com.sample.devicemanagement.service.exception.DeviceAlreadyExistsException;
+import com.sample.devicemanagement.service.exception.DeviceNotFoundException;
 import com.sample.devicemanagement.service.mapper.DeviceEntityMapper;
 import jakarta.persistence.PersistenceException;
 import lombok.AllArgsConstructor;
@@ -42,8 +43,10 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public DeviceDto getDeviceById(Long deviceId) {
-        return null;
+    public DeviceDto getDeviceById(String deviceId) {
+        return deviceRepository.findDeviceByDeviceId(deviceId)
+                .map(deviceEntityMapper::toDeviceDto)
+                .orElseThrow(() -> new DeviceNotFoundException("Device not found with id: " + deviceId));
     }
 
     @Override

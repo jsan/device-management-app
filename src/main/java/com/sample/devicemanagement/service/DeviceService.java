@@ -9,7 +9,7 @@ import java.util.List;
 public interface DeviceService {
 
     DeviceDto createDevice(DeviceDto device);
-    DeviceDto getDeviceById(Long deviceId);
+    DeviceDto getDeviceById(String deviceId);
     DeviceTableViewDto getAllDevices(Pageable paging);
     List<DeviceDto> getAllDevicesByBrand(String brand);
     List<DeviceDto> getAllDevicesByState(String state);

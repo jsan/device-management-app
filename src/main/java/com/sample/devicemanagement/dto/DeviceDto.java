@@ -11,12 +11,15 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.time.Instant;
 
+import static com.sample.devicemanagement.util.DeviceConstants.DEVICE_ID_REGEX;
+import static com.sample.devicemanagement.util.DeviceConstants.DEVICE_ID_REGEX_FAIL_MESSAGE;
+
 @Value
 @Builder
 @Jacksonized
 public class DeviceDto {
 
-    @Pattern(regexp = "^[A-Z0-9]+$", message = "Device ID must contain only uppercase letters and numbers")
+    @Pattern(regexp = DEVICE_ID_REGEX, message = DEVICE_ID_REGEX_FAIL_MESSAGE)
     @Size(min = 1, max = 6)
     @NotNull(message = "Device ID is mandatory, can't be empty")
     String deviceId;
