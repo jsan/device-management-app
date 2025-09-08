@@ -18,7 +18,7 @@ REST API application for managing device resources
 
 ### Run Locally
 1. Ensure Docker is installed and running on your machine.
-2. Clone the repository to your local machine on a folder of your choice:
+2. For the first run, clone the repository to your local machine on a folder of your choice:
 ```bash
 ./git clone https://github.com/jsan/device-management-app.git 
 ```
@@ -78,6 +78,7 @@ DMA-08 Implement Documentation
 ### Tech Stack
 - Java 21
 - Spring Boot latest
+- Spring security
 - Spring Data JPA
 - MySQL
 - Docker

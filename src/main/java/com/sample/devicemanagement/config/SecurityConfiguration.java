@@ -26,9 +26,9 @@ public class SecurityConfiguration {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain filterChainBias(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChainDevices(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/**")
+            .securityMatcher("/api/v1/devices")
             .cors(withDefaults())
             .csrf(CsrfConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

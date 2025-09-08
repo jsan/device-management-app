@@ -93,7 +93,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/devices?brand=samsung&state=inactive",
+					"raw": "http://localhost:8080/api/v1/devices?brand=motorola&state=inactive",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -107,7 +107,7 @@
 					"query": [
 						{
 							"key": "brand",
-							"value": "samsung"
+							"value": "motorola"
 						},
 						{
 							"key": "state",
@@ -131,7 +131,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "      {\r\n        \"deviceName\": \"Smartphone\",\r\n        \"deviceBrand\": \"Motorola\",\r\n        \"deviceState\": \"in-use\"\r\n   }",
+					"raw": "      {\r\n        \"deviceState\": \"inactive\"\r\n   }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -161,15 +161,17 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/devices/9",
+					"raw": "http://localhost:8080/api/v1/devices/CM7T52",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
+						"v1",
 						"devices",
-						"9"
+						"CM7T52"
 					]
 				}
 			},
