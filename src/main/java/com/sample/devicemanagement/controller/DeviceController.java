@@ -5,7 +5,6 @@ import com.sample.devicemanagement.domain.State;
 import com.sample.devicemanagement.dto.DeviceDto;
 import com.sample.devicemanagement.dto.DeviceTableViewDto;
 import com.sample.devicemanagement.dto.DeviceUpdateDto;
-import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import com.sample.devicemanagement.service.DeviceService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -18,6 +17,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,6 +76,13 @@ public class DeviceController {
               @RequestBody @Valid DeviceUpdateDto deviceUpdateDto) {
         log.info("Updating device ID {} with values {}", deviceId, deviceUpdateDto);
         return ResponseEntity.ok(deviceService.updateDeviceById(deviceId, deviceUpdateDto));
+    }
+
+    @DeleteMapping("/{deviceId}")
+    public ResponseEntity<Void> deleteDevice(@PathVariable("deviceId") String deviceId) {
+        log.info("Deleting device ID {}", deviceId);
+        deviceService.deleteDevice(deviceId);
+        return ResponseEntity.noContent().build();
     }
 
 }

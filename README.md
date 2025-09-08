@@ -93,6 +93,7 @@ DMA-08 Implement Documentation
 
 ### Spillover
 - Documentation error page could not be completed within the initial project scope.
+- Proper API schema definitions for request and response and error details bodies in Swagger.
 
 ### Future Improvements
 - Future enhancements could include adding authentication and authorization using Spring Security.

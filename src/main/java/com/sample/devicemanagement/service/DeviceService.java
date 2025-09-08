@@ -13,6 +13,6 @@ public interface DeviceService {
     DeviceDto updateDeviceById(String deviceId, DeviceUpdateDto device);
     DeviceTableViewDto getAllDevices(Pageable paging);
     DeviceTableViewDto getDevicesByBrandAndState(Pageable paging, String brand, State state);
-    void deleteDevice(Long id);
+    void deleteDevice(String deviceId);
 
 }

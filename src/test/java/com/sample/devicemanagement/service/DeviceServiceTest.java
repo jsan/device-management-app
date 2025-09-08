@@ -277,5 +277,45 @@ class DeviceServiceTest {
         verify(deviceRepository, never()).save(any());
     }
 
+    @Test
+    void deleteDevice_successful() {
+        DeviceEntity existingEntity = DeviceEntity.builder()
+                .deviceId(DEVICE_ID)
+                .deviceState(State.AVAILABLE)
+                .build();
+
+        when(deviceRepository.findDeviceByDeviceId(DEVICE_ID)).thenReturn(Optional.of(existingEntity));
+
+        deviceService.deleteDevice(DEVICE_ID);
+
+        verify(deviceRepository).findDeviceByDeviceId(DEVICE_ID);
+        verify(deviceRepository).delete(existingEntity);
+    }
+
+    @Test
+    void deleteDevice_inUse_throwsDeviceInUseException() {
+        DeviceEntity existingEntity = DeviceEntity.builder()
+                .deviceId(DEVICE_ID)
+                .deviceState(State.IN_USE)
+                .build();
+
+        when(deviceRepository.findDeviceByDeviceId(DEVICE_ID)).thenReturn(Optional.of(existingEntity));
+
+        assertThrows(DeviceInUseException.class, () -> deviceService.deleteDevice(DEVICE_ID));
+
+        verify(deviceRepository).findDeviceByDeviceId(DEVICE_ID);
+        verify(deviceRepository, never()).delete(any());
+    }
+
+    @Test
+    void deleteDevice_notFound_throwsDeviceNotFoundException() {
+        when(deviceRepository.findDeviceByDeviceId(DEVICE_ID)).thenReturn(Optional.empty());
+
+        assertThrows(DeviceNotFoundException.class, () -> deviceService.deleteDevice(DEVICE_ID));
+
+        verify(deviceRepository).findDeviceByDeviceId(DEVICE_ID);
+        verify(deviceRepository, never()).delete(any());
+    }
+
 }
 

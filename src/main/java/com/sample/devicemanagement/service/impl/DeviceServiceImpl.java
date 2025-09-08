@@ -92,8 +92,20 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Transactional
     @Override
-    public void deleteDevice(Long id) {
+    public void deleteDevice(String deviceId) {
+        DeviceEntity deviceEntity = deviceRepository.findDeviceByDeviceId(deviceId)
+                .orElseThrow(() -> new DeviceNotFoundException(deviceId));
 
+        if (deviceEntity.getDeviceState() == IN_USE) {
+            throw new DeviceInUseException(deviceId);
+        }
+
+        try {
+            deviceRepository.delete(deviceEntity);
+        } catch (Exception e) {
+            log.error("Unable to delete Device data from persistence:", e);
+            throw new PersistenceException(e);
+        }
     }
 
     private static boolean isUpdateNotAllowed(DeviceUpdateDto deviceUpdateDto, DeviceEntity entity) {
