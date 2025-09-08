@@ -46,6 +46,7 @@ docker compose down
 ```
 9. Access the API documentation at: http://localhost:8080/swagger-ui/index.html
 10. Access the Actuator endpoints at: http://localhost:8080/actuator
+11. Postman collection is available in the `postman` folder
 
 ### Prerequisites
 - Java 21
