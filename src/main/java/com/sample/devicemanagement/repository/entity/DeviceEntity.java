@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,10 +28,13 @@ import java.time.Instant;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "devices", indexes = {
-        @Index(name = "idx_device_brand", columnList = "deviceBrand"),
-        @Index(name = "idx_device_state", columnList = "deviceState")
-})
+@Table(name = "devices",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_device_id", columnNames = "deviceId")},
+        indexes = {
+                @Index(name = "idx_device_brand", columnList = "deviceBrand"),
+                @Index(name = "idx_device_state", columnList = "deviceState")
+        })
 public class DeviceEntity {
 
     @Id
@@ -38,7 +42,7 @@ public class DeviceEntity {
     private Long id;
 
     @Size(min = 1, max = 6)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String deviceId;
 
     @Column(nullable = false)

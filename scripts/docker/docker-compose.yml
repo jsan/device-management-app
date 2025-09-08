@@ -9,14 +9,13 @@ services:
     ports:
       - "3307:3306"
 
-  app:
-    build:
-      context: ../..
-      dockerfile: Dockerfile
+  device-management-app:
+    image: device-management-app:latest
     container_name: device-management-app
     ports:
       - "8080:8080"
     environment:
+      SPRING_PROFILES_ACTIVE: docker,no-auth
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/device_management
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
