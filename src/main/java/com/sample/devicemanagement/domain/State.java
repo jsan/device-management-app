@@ -29,7 +29,7 @@ public enum State {
                 return s;
             }
         }
-        throw new IllegalArgumentException("Invalid state: " + text);
+        return null;
     }
 
 }

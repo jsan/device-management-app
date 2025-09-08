@@ -34,7 +34,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String ALL_ERRORS_PAGE = "https://address.to.error.documentation.page/docs/default/device-management-app/errorCodes#%s";
     private static final String DEVICE_SERVICE_ERROR = "device-service-error";
     private static final String DEVICE_NOT_FOUND = "device-not-found";
-    private static final String PROBLEM_TYPE_BASE_URL = "urn:problem-type:";
+    private static final String DEVICE_IN_USE = "device-in-use";
 
     @ExceptionHandler(DeviceAlreadyExistsException.class)
     ProblemDetail handleDeviceAlreadyExistsException(@NotNull DeviceAlreadyExistsException ex) {
@@ -51,6 +51,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = forStatusAndDetail(NOT_FOUND, ex.getMessage());
         problemDetail.setType(create(DEVICE_NOT_FOUND));
         problemDetail.setTitle("Device Not Found");
+        return problemDetail;
+    }
+
+    @ExceptionHandler(DeviceInUseException.class)
+    ProblemDetail handleDeviceInUseException(@NotNull DeviceInUseException ex) {
+        logWarn(DEVICE_IN_USE);
+        ProblemDetail problemDetail = forStatusAndDetail(BAD_REQUEST, ex.getMessage());
+        problemDetail.setType(create(DEVICE_IN_USE));
+        problemDetail.setTitle("Device In Use");
         return problemDetail;
     }
 
@@ -92,8 +101,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(DOCUMENTATION_REFERENCE, create(format(ALL_ERRORS_PAGE, errorMessage)));
     }
 
-    protected void logWarn(String infoMessage) {
-        log.warn(DOCUMENTATION_REFERENCE, create(format(ALL_ERRORS_PAGE, infoMessage)));
+    protected void logWarn(String warnMessage) {
+        log.warn(DOCUMENTATION_REFERENCE, create(format(ALL_ERRORS_PAGE, warnMessage)));
     }
 
 }

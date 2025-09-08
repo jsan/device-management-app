@@ -3,9 +3,11 @@ package com.sample.devicemanagement.service;
 import com.sample.devicemanagement.domain.State;
 import com.sample.devicemanagement.dto.DeviceDto;
 import com.sample.devicemanagement.dto.DeviceTableViewDto;
+import com.sample.devicemanagement.dto.DeviceUpdateDto;
 import com.sample.devicemanagement.repository.DeviceRepository;
 import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import com.sample.devicemanagement.service.exception.DeviceAlreadyExistsException;
+import com.sample.devicemanagement.service.exception.DeviceInUseException;
 import com.sample.devicemanagement.service.exception.DeviceNotFoundException;
 import com.sample.devicemanagement.service.impl.DeviceServiceImpl;
 import com.sample.devicemanagement.service.mapper.DeviceEntityMapper;
@@ -30,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,6 +40,7 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
 class DeviceServiceTest {
 
+    private static final String DEVICE_ID = "ABC123";
     private DeviceDto deviceDto;
     private DeviceEntity deviceEntity;
     private DeviceEntity savedDeviceEntity;
@@ -193,6 +197,84 @@ class DeviceServiceTest {
 
         assertTrue(ex.getCause() instanceof RuntimeException);
         assertEquals("DB down", ex.getCause().getMessage());
+    }
+
+    @Test
+    void updateDevice_successful() {
+        DeviceUpdateDto updateDto = DeviceUpdateDto.builder()
+                .deviceName("NewName")
+                .deviceBrand("NewBrand")
+                .deviceState("AVAILABLE")
+                .build();
+        DeviceEntity existingEntity = DeviceEntity.builder()
+                .deviceId(DEVICE_ID)
+                .deviceName("OldName")
+                .deviceBrand("OldBrand")
+                .deviceState(State.AVAILABLE)
+                .build();
+        DeviceEntity mergedEntity = existingEntity.toBuilder()
+                .deviceName(updateDto.getDeviceName())
+                .deviceBrand(updateDto.getDeviceBrand())
+                .deviceState(State.AVAILABLE)
+                .build();
+        DeviceDto expectedDto = DeviceDto.builder()
+                .deviceId(DEVICE_ID)
+                .deviceName("NewName")
+                .deviceBrand("NewBrand")
+                .deviceState("AVAILABLE")
+                .build();
+
+        when(deviceRepository.findDeviceByDeviceId(DEVICE_ID)).thenReturn(Optional.of(existingEntity));
+        when(deviceEntityMapper.mergeDeviceEntity(updateDto, existingEntity)).thenReturn(mergedEntity);
+        when(deviceRepository.save(mergedEntity)).thenReturn(mergedEntity);
+        when(deviceEntityMapper.toDeviceDto(mergedEntity)).thenReturn(expectedDto);
+
+        DeviceDto result = deviceService.updateDeviceById(DEVICE_ID, updateDto);
+
+        assertEquals(expectedDto, result);
+        verify(deviceRepository).findDeviceByDeviceId(DEVICE_ID);
+        verify(deviceEntityMapper).mergeDeviceEntity(updateDto, existingEntity);
+        verify(deviceRepository).save(mergedEntity);
+    }
+
+    @Test
+    void updateDevice_notAllowed_throwsException() {
+        DeviceUpdateDto updateDto = DeviceUpdateDto.builder()
+                .deviceName("NewName")
+                .build();
+        DeviceEntity existingEntity = DeviceEntity.builder()
+                .deviceId(DEVICE_ID)
+                .deviceName("OldName")
+                .deviceBrand("OldBrand")
+                .deviceState(State.IN_USE)
+                .build();
+
+        when(deviceRepository.findDeviceByDeviceId(DEVICE_ID)).thenReturn(Optional.of(existingEntity));
+
+        assertThrows(DeviceInUseException.class,
+                () -> deviceService.updateDeviceById(DEVICE_ID, updateDto));
+
+        verify(deviceRepository).findDeviceByDeviceId(DEVICE_ID);
+        verify(deviceEntityMapper, never()).mergeDeviceEntity(any(), any());
+        verify(deviceRepository, never()).save(any());
+    }
+
+    @Test
+    void updateDevice_notFound_throwsException() {
+        DeviceUpdateDto updateDto = DeviceUpdateDto.builder()
+                .deviceName("NewName")
+                .deviceBrand("NewBrand")
+                .deviceState("AVAILABLE")
+                .build();
+
+        when(deviceRepository.findDeviceByDeviceId(DEVICE_ID)).thenReturn(Optional.empty());
+
+        assertThrows(DeviceNotFoundException.class,
+                () -> deviceService.updateDeviceById(DEVICE_ID, updateDto));
+
+        verify(deviceRepository).findDeviceByDeviceId(DEVICE_ID);
+        verify(deviceEntityMapper, never()).mergeDeviceEntity(any(), any());
+        verify(deviceRepository, never()).save(any());
     }
 
 }

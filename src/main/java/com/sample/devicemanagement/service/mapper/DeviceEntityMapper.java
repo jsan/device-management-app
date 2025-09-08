@@ -4,10 +4,13 @@ import com.sample.devicemanagement.domain.State;
 import com.sample.devicemanagement.dto.DeviceDto;
 import com.sample.devicemanagement.dto.DeviceTableViewDto;
 import com.sample.devicemanagement.dto.DeviceTableViewDto.DeviceDataEntry;
+import com.sample.devicemanagement.dto.DeviceUpdateDto;
 import com.sample.devicemanagement.repository.entity.DeviceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -16,7 +19,7 @@ import static com.sample.devicemanagement.domain.State.AVAILABLE;
 import static com.sample.devicemanagement.domain.State.INACTIVE;
 import static com.sample.devicemanagement.domain.State.IN_USE;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface DeviceEntityMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -33,6 +36,13 @@ public interface DeviceEntityMapper {
     DeviceTableViewDto toDeviceTableView(Page<DeviceEntity> pageEntity);
 
     DeviceDataEntry toStoreDataEntry(DeviceEntity entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deviceId", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "deviceState", source= "deviceState", qualifiedByName = "toDeviceState")
+    DeviceEntity mergeDeviceEntity(DeviceUpdateDto deviceUpdateDto, @MappingTarget DeviceEntity deviceEntity);
+
 
     @Named("pageToDeviceDataEntry")
     default List<DeviceDataEntry> pageToDeviceDataEntry(Page<DeviceEntity> pageEntity) {
