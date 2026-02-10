@@ -100,6 +100,9 @@ public class DeviceServiceImpl implements DeviceService {
 //        DeviceDto deviceDto = deviceEntityMapper.toDeviceDto(deviceEntity);
 //
 //        return deviceDto;
+//        return deviceDto;
+//        return deviceDto;
+//        return deviceDto;
 
         DeviceEntity deviceEntity = deviceRepository.findDeviceByDeviceId(deviceId)
                 .orElseThrow(() -> new DeviceNotFoundException(deviceId));
