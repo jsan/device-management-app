@@ -93,6 +93,14 @@ public class DeviceServiceImpl implements DeviceService {
     @Transactional
     @Override
     public void deleteDevice(String deviceId) {
+        //        Optional<DeviceEntity> deviceEntityOptional = deviceRepository.findDeviceByDeviceId(deviceId);
+//
+//        DeviceEntity deviceEntity = deviceEntityOptional.get();
+//
+//        DeviceDto deviceDto = deviceEntityMapper.toDeviceDto(deviceEntity);
+//
+//        return deviceDto;
+
         DeviceEntity deviceEntity = deviceRepository.findDeviceByDeviceId(deviceId)
                 .orElseThrow(() -> new DeviceNotFoundException(deviceId));
 

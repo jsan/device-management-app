@@ -1,0 +1,53 @@
+info:
+  app:
+    name: "Device managing app"
+springdoc-openapi:
+  info:
+    title: Device Management API
+    description: REST API for managing devices
+    version: "1.0.0"
+    contact:
+      name: Jorge Mello
+      email: jorge.mello@gmail.com
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/device_management}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+# Actuator settings
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    env:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+
+# Swagger / OpenAPI customization
+springdoc:
+  swagger-ui:
+    path: /docs                   # access Swagger UI at /docs
+    display-request-duration: true
+    operations-sorter: method     # sort endpoints by HTTP method
+    tags-sorter: alpha            # sort tags alphabetically
+    doc-expansion: none           # collapse endpoints by default
+    filter: true                  # enable search box in UI
+
+  # API metadata
+  api-docs:
+    version: openapi_3_0          # use OpenAPI 3.0 format
+    path: /v3/api-docs.yaml       # serve OpenAPI docs as YAML
+  override-with-generic-response: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
